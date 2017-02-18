@@ -1,9 +1,9 @@
 'use strict';
 
 const Hapi = require('hapi');
-const AuthHeader = require('hapi-auth-token');
 const auths = require('./config/auth');
 var models = require('./models');
+var pkg = require('./package.json');
 
 
 
@@ -16,10 +16,24 @@ server.connection({
     port: 8000
 });
 
-server.register(AuthHeader, (err) => {
+const options = {
+    info: {
+            'title': 'Eventus 2 API Documentation',
+            'version': pkg.version,
+        }
+    };
+
+var swagger = {
+  register: require('hapi-swagger'),
+  options: options
+};
+
+server.register([require('hapi-auth-token'),require('inert'), require('vision'),swagger], (err) => {
 
     //Register the auths types
-    server.auth.strategy('apptoken', 'header-access-tokens', auths.appToken);
+    server.auth.strategy('app', 'header-access-tokens', auths.app);
+    server.auth.strategy('full', 'header-access-tokens', auths.full);
+
 
     var user_routes = require('./routes/user_routes').init(server);
 

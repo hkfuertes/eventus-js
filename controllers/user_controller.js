@@ -2,88 +2,83 @@ var models = require('../models');
 
 module.exports =  {
   //Si llegas a ejecutar esto, es que tienes todo bien!
-  checkUserTokenAction: function (request, reply) {
-    reply({success: true});
-  },
-  /*
-  //Security auth especial, damos token.
-  obtainAccessTokenAction: function (request, reply) {
-    User.checkUser(request.params.username, request.payload.password)
-    .catch(function(){
-      reply({success:false, error:2});
-    })
-    .then(function(user){
-      Token.getTokenForUser(user)
-      .catch(Token.create)
-      .then(function(token){
-        reply({
-          success:true,
-          user: {
-            username: user.username,
-            token: token.token
-          }
-        });
-
-      });
-    })
-  },
-  //Security normal, doble token
-  getUserInfoAction: function (request, reply) {
-    User.getUser(request.params.username)
-    .catch(function () {
-      reply({success: false, error: 3});
-    })
-    .then(function(user){
-      reply({
-        success: true,
-        user:{
-          firstname: user.name,
-          lastname: user.lname,
-          email: user.email
-        }
+  validateAction: function (request, reply) {
+    var username = request.payload.username;
+    var password = request.payload.password;
+    models.User.find({
+      where:{
+        "username": username,
+        "password": password
+      }
+    }).then(function(user){
+      models.Token.find({
+        where:{
+          UserId: user.id
+        },
+        order: [['updatedAt', 'DESC']],
+        limit:1
+      }).then(function(token){
+        //Tenemos el usuario y el token.
+        reply({"user":{"username": user.username, "token": token.token}});
+      }).catch(function(){
+        //Tenemos el usuario y hay que crear el token.
+        models.Token.generateToken().then(function(token){
+          user.addToken(token);
+          user.save().then(function(){
+            reply({"user":{"username": user.username, "token": token.token}});
+          });
+        })
       });
     });
+  },
+  getUserAction: function(request,reply){
+    //request.auth.credentials
+    //console.log(request.auth.credentials);
+    reply(request.auth.credentials);
   },
   //security simple
   createUserAction: function (request, reply) {
-    User.getUser(request.payload.username)
-    .then(function (user) {
-      reply({success: false, error:2})
-    })
-    .catch(function(){
-      new User({
-        username: request.payload.username,
-        password: request.payload.password,
-        name: request.payload.firstname,
-        lname: request.payload.lastname,
-        email: request.payload.email
-      }).save()
-      .then(function (user) {
-        Token.getTokenForUser(user)
-        .catch(Token.create)
-        .then(function(token){
-          reply({
-            success:true,
-            user: {
-              username: user.username,
-              token: token.token
-            }
+    console.log(request.payload.username);
+    models.User.count({
+      where:{
+        username: request.payload.username
+      }
+    }).then(function (count) {
+      if(count>0)
+        reply({success: false, error:"User exists!"})
+      else
+        models.User.create({
+          username: request.payload.username,
+          password: request.payload.password,
+          name: request.payload.name,
+          lname: request.payload.lname,
+          email: request.payload.email
+        }).then(function (user) {
+          //Tenemos el usuario y hay que crear el token.
+          models.Token.generateToken().then(function(token){
+            user.addToken(token);
+            user.save().then(function(){
+              reply({"user":{"username": user.username, "token": token.token}});
+            });
           });
-
         });
-      });
     })
   },
-  */
   //security simple
-  createTestUser: function (request, reply) {
-    models.User.find({ where: { id: 1 } })
-    .then(function(user){
-      models.Token.generateToken().then(function(token){
-        user.addToken(token);
-        user.save().then(reply);
-      })
-    });
+  updateUserAction: function (request, reply) {
+    var user = request.auth.credentials;
+    var params = request.payload;
+    console.log(request.payload);
+
+    if('name' in params){
+      user.name = params.name;
+    }
+
+    if('lname' in params){
+      user.name = params.lname;
+    }
+
+    user.save().then(reply);
   },
   listUsersAction: function(request, reply){
     models.User.find().then(reply);
