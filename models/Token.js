@@ -1,29 +1,17 @@
 "use strict";
 
 module.exports = function(sequelize, DataTypes) {
-  var User = sequelize.define("User", {
-    username: DataTypes.STRING,
-    password: DataTypes.STRING,
-    name: DataTypes.STRING,
-    lname: DataTypes.STRING,
-    email: DataTypes.STRING
+  var Token = sequelize.define("Token", {
+    token: DataTypes.STRING,
+    valid_until: DataTypes.DATE
   },{
     classMethods: {
-      associate: function(models) {
-        //User.hasMany(models.Task)
+      //Como si fuera el constructor, devuelve una promesa.
+      generateToken: function(){
+        return this.sequelize.models.Token.create({token:"token2"});
       }
-    }
-    ,
-    instanceMethods: {
-      getToken: function(){
-        //return token
-      },
-      createToken: function(){
-        //Create and return token.
-      }
-
     }
   });
 
-  return User;
+  return Token;
 };

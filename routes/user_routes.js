@@ -34,6 +34,9 @@ exports.init = function (server) {
     server.route({
         method: 'GET',
         path: '/user/create_test',
-        handler: UserController.createTestUser
+        config:{
+          auth: 'simple',
+          handler: UserController.createTestUser
+        }
     });
 }

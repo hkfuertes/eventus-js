@@ -1,11 +1,11 @@
 var models = require('../models');
 
 module.exports =  {
-  /*
   //Si llegas a ejecutar esto, es que tienes todo bien!
   checkUserTokenAction: function (request, reply) {
     reply({success: true});
   },
+  /*
   //Security auth especial, damos token.
   obtainAccessTokenAction: function (request, reply) {
     User.checkUser(request.params.username, request.payload.password)
@@ -77,12 +77,12 @@ module.exports =  {
   */
   //security simple
   createTestUser: function (request, reply) {
-    models.User.create({
-      username: "Usuairo",
-      password: "password",
-      name: "usuario",
-      lname: "apellido",
-      email: "email@email.com"
-    }).then(reply);
+    models.User.find({ where: { id: 1 } })
+    .then(function(user){
+      models.Token.generateToken().then(function(token){
+        user.addToken(token);
+        user.save().then(reply);
+      })
+    });
   }
 }

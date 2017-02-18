@@ -10,18 +10,14 @@ module.exports = function(sequelize, DataTypes) {
   },{
     classMethods: {
       associate: function(models) {
-        //User.hasMany(models.Task)
+        User.hasMany(models.Token, {as: "Tokens"});
       }
     }
     ,
     instanceMethods: {
       getToken: function(){
         //return token
-      },
-      createToken: function(){
-        //Create and return token.
       }
-
     }
   });
 
