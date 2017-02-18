@@ -84,5 +84,8 @@ module.exports =  {
         user.save().then(reply);
       })
     });
+  },
+  listUsersAction: function(request, reply){
+    models.User.find().then(reply);
   }
 }

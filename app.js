@@ -1,7 +1,7 @@
 'use strict';
 
 const Hapi = require('hapi');
-const AuthBearer = require('hapi-auth-bearer-token');
+const AuthHeader = require('hapi-auth-token');
 const auths = require('./config/auth');
 var models = require('./models');
 
@@ -16,10 +16,10 @@ server.connection({
     port: 8000
 });
 
-server.register(AuthBearer, (err) => {
+server.register(AuthHeader, (err) => {
 
     //Register the auths types
-    server.auth.strategy('simple', 'bearer-access-token', auths.oneToken);
+    server.auth.strategy('apptoken', 'header-access-tokens', auths.appToken);
 
     var user_routes = require('./routes/user_routes').init(server);
 

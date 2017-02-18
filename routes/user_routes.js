@@ -35,8 +35,18 @@ exports.init = function (server) {
         method: 'GET',
         path: '/user/create_test',
         config:{
-          auth: 'simple',
+          auth: 'apptoken',
           handler: UserController.createTestUser
         }
     });
+
+    //List users
+    server.route({
+      method:'GET',
+      path:"/users",
+      config:{
+        auth: "apptoken",
+        handler: UserController.listUsersAction
+      }
+    })
 }
