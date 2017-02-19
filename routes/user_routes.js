@@ -1,5 +1,6 @@
 var UserController = require("../controllers/user_controller");
 var Joi = require("Joi");
+var literals = require("../config/literals");
 
 exports.init = function (server) {
   //Validates a User.
@@ -12,8 +13,8 @@ exports.init = function (server) {
       tags: ['api', 'users'],
       validate: {
         payload: {
-          username : Joi.string().required().description('Username of the user to be validated.'),
-          password : Joi.string().required().description('Password of the user to be validated.'),
+          username : Joi.string().required().description(literals.user.username),
+          password : Joi.string().required().description(literals.user.password),
         }
       },
       handler: UserController.validateAction
@@ -41,8 +42,8 @@ exports.init = function (server) {
       tags: ['api', 'users'],
       validate: {
         payload: {
-          name : Joi.string().description('Name to be updated.'),
-          lname : Joi.string().description('Lastname to be updated.'),
+          name : Joi.string().description(literals.user.name),
+          lname : Joi.string().description(literals.user.lname)
         }
       },
       handler: UserController.updateUserAction
@@ -59,11 +60,11 @@ exports.init = function (server) {
       tags: ['api', 'users'],
       validate: {
         payload: {
-          username : Joi.string().required().description('Username for the new User.'),
-          password : Joi.string().required().description('Password for the new User.'),
-          name : Joi.string().required().description('Name for the new User.'),
-          lname : Joi.string().required().description('Lastname for the new User.'),
-          email : Joi.string().required().description('eMail for the new User.')
+          username : Joi.string().required().description(literals.user.username),
+          password : Joi.string().required().description(literals.user.password),
+          name : Joi.string().required().description(literals.user.name),
+          lname : Joi.string().required().description(literals.user.lname),
+          email : Joi.string().required().description(literals.user.email)
         }
       },
       handler: UserController.createUserAction

@@ -1,3 +1,25 @@
 {
-  "user_exists": "User exists!"
+  "user":{
+    "username": "Username of the user.",
+    "password": "Password of the user.",
+    "name": "Name of the user.",
+    "lname": "Lastname of the user.",
+    "email": "eMail of the user.",
+    "errors":{
+      "user_exists": "User exists!"
+    }
+  },
+  "event":{
+    "key": "Key of the event.",
+    "name": "Name of the event.",
+    "place": "Place of the event.",
+    "start_date":"Date of the event.",
+    "end_date": "End date of the event. If not passed, this will be a one-day event.",
+    "type": "Type of the event.",
+    "errors":{
+      "not_found": "Event not found!",
+      "not_admin": "You are not the Admin of the Event!",
+      "not_found_admin": "The event does not exists or you are not the admin!"
+    }
+  }
 }

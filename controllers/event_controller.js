@@ -1,5 +1,6 @@
 var models = require('../models');
 var Boom = require('boom');
+var literals = require('../config/literals');
 
 module.exports =  {
   createEventAction: function (request, reply) {
@@ -7,11 +8,17 @@ module.exports =  {
 
     var name = request.payload.name;
     var place = request.payload.place;
-    var date = request.payload.date;
+    var start_date = request.payload.start_date;
     var type = request.payload.type;
+    var end_date = request.payload.end_date;
 
-    models.Event.createEvent(name, place, date, type)
-    .then(function(event){
+    models.Event.create({
+      "name": name,
+      "place": place,
+      "start_date": start_date,
+      "end_date": end_date,
+      "type": type
+    }).then(function(event){
       user.addEvent(event);
       user.save().then(function(){});
       event.setAdmin(user);
@@ -31,6 +38,8 @@ module.exports =  {
       event.getParticipants().then(function(participants){
         reply({"event": event, "Participants": participants});
       });
+    }).catch(function(){
+      reply(Boom.notFound(literals.event.errors.not_found));
     });
 
   },
@@ -58,7 +67,9 @@ module.exports =  {
       user.save().then(function(user){
         reply({"user": user, "event": event});
       });
-    })
+    }).catch(function(){
+      reply(Boom.notFound(literals.event.errors.not_found));
+    });
   },
   unjoinEventAction: function (request, reply) {
     var user = request.auth.credentials;
@@ -72,7 +83,9 @@ module.exports =  {
       user.save().then(function(user){
         reply({"user": user, "event": event});
       });
-    })
+    }).catch(function(){
+      reply(Boom.notFound(literals.event.errors.not_found));
+    });
   },
   modifyEventAction: function (request, reply) {
     var user = request.auth.credentials;
@@ -89,17 +102,22 @@ module.exports =  {
       if('place' in request.payload){
         event.place = request.payload.place;
       }
-      if('date' in request.payload){
-        event.date = request.payload.date;
+      if('start_date' in request.payload){
+        event.start_date = request.payload.start_date;
       }
+
+      if('end_date' in request.payload){
+        event.end_date = request.payload.end_date;
+      }
+
       if('type' in request.payload){
         event.type = request.payload.type;
       }
 
       event.save().then(reply);
     })
-    .catch(function(){
-      reply(Boom.unauthorized("You are not the Admin of the Event!"))
+    .catch(function(err){
+      reply(Boom.notFound(literals.event.errors.not_found_admin));
     });
   },
 }

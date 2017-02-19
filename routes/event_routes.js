@@ -1,5 +1,6 @@
 var EventController = require("../controllers/event_controller");
 var Joi = require("Joi");
+var literals = require("../config/literals");
 
 exports.init = function (server) {
   server.route({
@@ -11,10 +12,11 @@ exports.init = function (server) {
       tags: ['api', 'events'],
       validate: {
         payload: {
-          name : Joi.string().required().description('Name of the event.'),
-          place : Joi.string().required().description('Place of the event.'),
-          date : Joi.date().required().description('Date of the event.'),
-          type : Joi.string().required().description('Type of the event.'),
+          name : Joi.string().required().description(literals.event.name),
+          place : Joi.string().required().description(literals.event.place),
+          start_date : Joi.date().required().description(literals.event.start_date),
+          end_date : Joi.date().description(literals.event.end_date),
+          type : Joi.string().required().description(literals.event.type),
         }
       },
       handler: EventController.createEventAction
@@ -30,7 +32,7 @@ exports.init = function (server) {
       tags: ['api', 'events'],
       validate: {
         params: {
-          key : Joi.string().required().description('Key of the event.'),
+          key : Joi.string().required().description(literals.event.key),
         }
       },
       handler: EventController.getEventAction
@@ -74,7 +76,7 @@ exports.init = function (server) {
       tags: ['api', 'events'],
       validate: {
         params: {
-          key : Joi.string().required().description('Key of the event.'),
+          key : Joi.string().required().description(literals.event.key),
         }
       },
       handler: EventController.joinEventAction
@@ -90,7 +92,7 @@ exports.init = function (server) {
       tags: ['api', 'events'],
       validate: {
         params: {
-          key : Joi.string().required().description('Key of the event.'),
+          key : Joi.string().required().description(literals.event.key),
         }
       },
       handler: EventController.unjoinEventAction
@@ -106,27 +108,15 @@ exports.init = function (server) {
       tags: ['api', 'events'],
       validate: {
         payload: {
-          key : Joi.string().required().description('Key of the event.'),
-          name : Joi.string().description('Name of the event.'),
-          place : Joi.string().description('Place of the event.'),
-          date : Joi.date().description('Date of the event.'),
-          type : Joi.string().description('Type of the event.')
+          key : Joi.string().required().description(literals.event.key),
+          name : Joi.string().required().description(literals.event.name),
+          place : Joi.string().required().description(literals.event.place),
+          start_date : Joi.date().required().description(literals.event.start_date),
+          end_date : Joi.date().description(literals.event.end_date),
+          type : Joi.string().required().description(literals.event.type)
         }
       },
       handler: EventController.modifyEventAction
     }
   });
-  /*
-  //List users
-  server.route({
-    method:'GET',
-    path:"/users",
-    config:{
-      auth: 'app',
-      description: 'Lists Users',
-      tags: ['api', 'users', 'debug'],
-      handler: UserController.listUsersAction
-    }
-  });
-  */
 }

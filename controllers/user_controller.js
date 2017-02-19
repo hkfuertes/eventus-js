@@ -1,4 +1,5 @@
 var models = require('../models');
+var literals = require('../config/literals');
 
 module.exports =  {
   //Si llegas a ejecutar esto, es que tienes todo bien!
@@ -45,7 +46,7 @@ module.exports =  {
       }
     }).then(function (count) {
       if(count>0)
-        reply({success: false, error:"User exists!"})
+        reply(Boom.forbidden(literals.errors.user_exists));
       else
         models.User.create({
           username: request.payload.username,
