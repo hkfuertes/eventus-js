@@ -1,5 +1,7 @@
 "use strict";
 
+var SequelizeTokenify = require('sequelize-tokenify');
+
 module.exports = function(sequelize, DataTypes) {
   var Token = sequelize.define("Token", {
     token: {
@@ -11,10 +13,16 @@ module.exports = function(sequelize, DataTypes) {
     classMethods: {
       //Como si fuera el constructor, devuelve una promesa.
       generateToken: function(){
-        return this.sequelize.models.Token.create({token:"USER_TOKEN"});
+        return this.sequelize.models.Token.create();
       }
     }
   });
+
+  SequelizeTokenify.tokenify(Token, {
+        field: 'token',
+        length: 64
+    });
+
 
   return Token;
 };

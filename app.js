@@ -36,6 +36,7 @@ server.register([require('hapi-auth-token'),require('inert'), require('vision'),
 
 
     var user_routes = require('./routes/user_routes').init(server);
+    var event_routes = require('./routes/event_routes').init(server);
 
    // Start the server
    models.sequelize.sync().then(function() {

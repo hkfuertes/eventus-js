@@ -72,7 +72,7 @@ exports.init = function (server) {
   //List users
   server.route({
     method:'GET',
-    path:"/users",
+    path:"/user/list",
     config:{
       auth: 'app',
       description: 'Lists Users',

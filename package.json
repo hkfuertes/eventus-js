@@ -15,6 +15,7 @@
     "inert": "^4.1.0",
     "mysql": "^2.13.0",
     "sequelize": "^3.30.2",
+    "sequelize-tokenify": "^0.1.4",
     "vision": "^4.1.1"
   }
 }
