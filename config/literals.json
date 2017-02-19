@@ -21,5 +21,13 @@
       "not_admin": "You are not the Admin of the Event!",
       "not_found_admin": "The event does not exists or you are not the admin!"
     }
+  },
+  "appointment":{
+    "time": "Time of the appointment",
+    "title": "Title/Text of the appointment",
+    "location": "Location of the appointment",
+    "errors":{
+      "not_found": "Appointment not found!"
+    }
   }
 }

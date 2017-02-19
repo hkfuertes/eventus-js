@@ -5,11 +5,9 @@ module.exports = function(sequelize, DataTypes) {
     time: DataTypes.DATE,
     title: DataTypes.STRING,
     location: DataTypes.STRING,
-    end_date: DataTypes.DATE
   },{
     classMethods: {
       associate: function(models) {
-        Appointment.belongsTo(models.Event);
       }
     }
     ,
