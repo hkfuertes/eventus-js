@@ -38,6 +38,8 @@ server.register([require('hapi-auth-token'),require('inert'), require('vision'),
     var user_routes = require('./routes/user_routes').init(server);
     var event_routes = require('./routes/event_routes').init(server);
     var appointment_routes = require('./routes/appointment_routes').init(server);
+    var pictures_routes = require('./routes/pictures_routes').init(server);
+
 
 
    // Start the server
